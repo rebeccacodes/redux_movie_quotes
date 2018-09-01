@@ -2,29 +2,29 @@ import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Input from './input';
 import { connect } from 'react-redux';
-import { signUp } from '../actions';
+import { signIn } from '../actions';
 
-class SignUp extends Component {
+class SignIn extends Component {
 
-    register = (values) => {
-        console.log('register values: ', values);
-        this.props.signUp(values);
+    logIn = (values) => {
+        console.log('login values: ', values);
+        this.props.signIn(values);
     }
 
     render() {
-        const { handleSubmit } = this.props;
+        const { handleSubmit, authError } = this.props;
         return (
             <div>
-                <h1 className="center">Sign Up</h1>
-                <form className="row" onSubmit={handleSubmit(this.register)}>
+                <h1 className="center">Sign In</h1>
+                <form className="row" onSubmit={handleSubmit(this.logIn)}>
                     <div className="col s12 m8 offset-m2">
                         <Field name="email" label="Email" component={Input} />
                         <Field type="password" name="password" label="Password" component={Input} />
-                        <Field type="password" name="confirmPassword" label="Confirm Password" component={Input} />
 
                         <div className="row">
                             <div className="col s12 right-align">
-                                <button className="btn blue darken-2">Sign Up</button>
+                                <button className="btn blue darken-2">Sign In</button>
+                                <p className="red-text darken-2">{authError}</p>
                             </div>
 
                         </div>
@@ -35,7 +35,7 @@ class SignUp extends Component {
     }
 }
 
-function validate({ email, password, confirmPassword }) {
+function validate({ email, password }) {
     const errors = {};
 
     if (!email) {
@@ -43,19 +43,22 @@ function validate({ email, password, confirmPassword }) {
     }
 
     if (!password) {
-        errors.password = 'Please choose a password';
+        errors.password = 'Please enter your password';
     }
 
-    if (password !== confirmPassword) {
-        errors.confirmPassword = 'Passwords do not match';
-    }
     return errors;
 
 }
 
-SignUp = reduxForm({
-    form: 'sign-up',
+SignIn = reduxForm({
+    form: 'sign-in',
     validate: validate
-})(SignUp)
+})(SignIn);
 
-export default connect(null, { signUp })(SignUp);
+function mapStateToProps(state) {
+    return {
+        authError: state.user.error
+    }
+}
+
+export default connect(mapStateToProps, { signIn })(SignIn);

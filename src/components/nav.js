@@ -1,19 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signIn, signOut } from '../actions';
 
 
+
 class Nav extends Component {
 
-    renderAuthButtons() {
+    renderLinks() {
         const { auth, signIn, signOut } = this.props;
 
         if (auth) {
-            return <button onClick={signOut} className="btn orange darken-2">Sign Out</button>
+            return (
+                <Fragment>
+                    <li><Link to="/secret-list">SECRET LIST</Link></li>
+                    <li><Link to="/movie-quote">MOVIE QUOTE</Link></li>
+                    <li><button onClick={signOut} className="btn orange darken-2">Sign Out</button></li>
+                </Fragment>
+            )
         }
 
-        return <button onClick={signIn} className="btn blue darken-2">Sign In</button>
+        return (
+            <Fragment>
+                <li><Link to="/sign-in">SIGN IN</Link></li>
+                <li> <Link to="/sign-up">SIGN UP</Link>
+                </li>
+            </Fragment>
+        )
     }
 
     render() {
@@ -25,11 +38,8 @@ class Nav extends Component {
 
                         <li><Link to="/">HOME</Link></li>
                         <li><Link to="/about">ABOUT</Link></li>
-                        <li><Link to="/secret-list">SECRET LIST</Link></li>
-                        <li><Link to="/movie-quote">MOVIE QUOTE</Link></li>
-                        <li><Link to="/sign-up">SIGN UP</Link></li>
 
-                        <li>{this.renderAuthButtons()}</li>
+                        {this.renderLinks()}
                     </ul>
 
                 </div>
